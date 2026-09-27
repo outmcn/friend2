@@ -116,10 +116,27 @@ class _PageFrame extends StatelessWidget {
   const _PageFrame({required this.title, required this.child, this.subtitle, this.action});
   final String title; final String? subtitle; final Widget? action; final Widget child;
   @override
-  Widget build(BuildContext context) => SafeArea(child: ListView(padding: const EdgeInsets.fromLTRB(16, 18, 16, 28), children: [
-    Row(children: [Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [TText(title, fontWeight: FontWeight.w700), if (subtitle != null) ...[const SizedBox(height: 4), TText(subtitle!)]])), if (action != null) action!]),
-    const SizedBox(height: 20), child,
-  ]));
+  Widget build(BuildContext context) => SafeArea(
+        child: Column(
+          children: [
+            TNavBar(
+              title: title,
+              useDefaultBack: false,
+              actions: action == null
+                  ? null
+                  : [
+                      TNavBarItem(customWidget: action!),
+                    ],
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 28),
+                children: [child],
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 class _HeroPanel extends StatelessWidget {
