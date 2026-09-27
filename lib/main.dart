@@ -80,6 +80,31 @@ class _DiscoveryScreen extends StatelessWidget {
   );
 }
 
+class _ProfileUserCard extends StatelessWidget {
+  const _ProfileUserCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return TCell(
+      image: TAvatar(
+        size: TAvatarSize.large,
+        child: const Icon(TIcons.user, size: 30),
+      ),
+      title: const Text('Friend 用户'),
+      subtitle: const Text('分享生活，遇见同频的人'),
+      note: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text('关注 12 · 粉丝 36', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
+          const SizedBox(height: 4),
+          Text('获赞 128', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
+        ],
+      ),
+      arrow: true,
+    );
+  }
+}
 class _MessageScreen extends StatelessWidget {
   const _MessageScreen();
   @override
@@ -101,7 +126,7 @@ class _ProfileScreen extends StatelessWidget {
     title: '我的',
     action: TButton(variant: TButtonVariant.text, icon: const Icon(TIcons.setting), onPressed: () {}, child: const Text('设置')),
     child: Column(children: [
-      TCell(image: TAvatar(size: TAvatarSize.large, child: const Icon(TIcons.user)), title: const Text('Friend 用户'), subtitle: const Text('分享生活，遇见同频的人'), arrow: true),
+      _ProfileUserCard(),
       const SizedBox(height: 16),
       TCellGroup(title: const Text('我的内容'), cells: [
         TCell(image: const Icon(TIcons.edit_1), title: const Text('动态'), note: const Text('12'), arrow: true),
