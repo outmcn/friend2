@@ -125,16 +125,43 @@ class _ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) => _PageFrame(
     title: '我的',
     action: TButton(variant: TButtonVariant.text, icon: const Icon(TIcons.setting), onPressed: () {}, child: const Text('设置')),
-    child: Column(children: [
-      _ProfileUserCard(),
-      const SizedBox(height: 16),
-      TCellGroup(title: const Text('我的内容'), cells: [
-        TCell(image: const Icon(TIcons.edit_1), title: const Text('动态'), note: const Text('12'), arrow: true),
-        TCell(image: const Icon(TIcons.star), title: const Text('收藏'), note: const Text('8'), arrow: true),
-        TCell(image: const Icon(TIcons.thumb_up), title: const Text('点赞'), note: const Text('24'), arrow: true),
-      ]),
-    ]),
+    child: const _XiaofanshuProfileLayout(),
   );
+}
+
+class _XiaofanshuProfileLayout extends StatelessWidget {
+  const _XiaofanshuProfileLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _ProfileUserCard(),
+        const SizedBox(height: 18),
+        TCellGroup(
+          title: const Text('常用功能'),
+          cells: [
+            TCell(image: const Icon(TIcons.edit_1), title: const Text('我的动态'), note: const Text('12'), arrow: true),
+            TCell(image: const Icon(TIcons.star), title: const Text('我的收藏'), note: const Text('8'), arrow: true),
+            TCell(image: const Icon(TIcons.thumb_up), title: const Text('我的点赞'), note: const Text('24'), arrow: true),
+          ],
+        ),
+        const SizedBox(height: 18),
+        TCellGroup(
+          title: const Text('创作与服务'),
+          cells: [
+            TCell(image: const Icon(TIcons.book), title: const Text('创作中心'), subtitle: const Text('记录生活，分享灵感'), arrow: true),
+            TCell(image: const Icon(TIcons.bookmark_add), title: const Text('购物与订单'), subtitle: const Text('查看你的服务记录'), arrow: true),
+            TCell(image: const Icon(TIcons.setting), title: const Text('设置'), subtitle: const Text('账号与隐私管理'), arrow: true),
+          ],
+        ),
+        const SizedBox(height: 18),
+        TText('Friend2 UI 原型', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
+      ],
+    );
+  }
 }
 
 class _PageFrame extends StatelessWidget {
