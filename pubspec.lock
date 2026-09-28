@@ -168,6 +168,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  tdesign_flutter_icons:
+    dependency: "direct main"
+    description:
+      name: tdesign_flutter_icons
+      sha256: "9bd2d92c20015e13615d33a254322a8adda62f62c08d5040cb7d4e12a49cb42e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   term_glyph:
     dependency: transitive
     description:
@@ -202,4 +210,4 @@ packages:
     version: "15.3.0"
 sdks:
   dart: ">=3.9.0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  flutter: ">=3.32.0"
