@@ -41,7 +41,11 @@ class _ReferenceHomeState extends State<_ReferenceHome> {
     return Scaffold(
       body: IndexedStack(
         index: tab,
-        children: const [_ButtonGallery(), _IconGallery()],
+        children: const [
+          _ButtonGallery(),
+          _IconGallery(),
+          _ComponentsGallery(),
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: tab,
@@ -56,6 +60,11 @@ class _ReferenceHomeState extends State<_ReferenceHome> {
             icon: Icon(TIcons.app),
             selectedIcon: Icon(TIcons.app_filled),
             label: '图标查看',
+          ),
+          NavigationDestination(
+            icon: Icon(TIcons.component_breadcrumb),
+            selectedIcon: Icon(TIcons.component_breadcrumb_filled),
+            label: '组件参考',
           ),
         ],
       ),
@@ -326,6 +335,171 @@ class _IconCard extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontSize: 10),
         ),
+      ),
+    );
+  }
+}
+
+class _ComponentsGallery extends StatefulWidget {
+  const _ComponentsGallery();
+
+  @override
+  State<_ComponentsGallery> createState() => _ComponentsGalleryState();
+}
+
+class _ComponentsGalleryState extends State<_ComponentsGallery> {
+  bool checked = false;
+  bool switched = true;
+  double slider = .6;
+  double rate = 3.5;
+  num stepper = 2;
+  int tab = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        children: [
+          const TNavBar(title: 'TD 组件参考', useDefaultBack: false),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+              children: [
+                _Section(
+                  title: '输入与选择',
+                  children: [
+                    TInput(
+                      label: '输入框',
+                      hintText: '请输入内容',
+                      prefix: const Icon(TIcons.edit_1),
+                    ),
+                    const SizedBox(height: 12),
+                    TTextarea(
+                      label: '多行输入',
+                      hintText: '请输入多行内容',
+                      minLines: 2,
+                      maxLines: 4,
+                    ),
+                    const SizedBox(height: 12),
+                    TSearchBar(hintText: '搜索'),
+                    const SizedBox(height: 12),
+                    TCheckbox(
+                      value: checked,
+                      title: '复选框',
+                      subTitle: '支持选中和半选状态',
+                      onChanged: (value) =>
+                          setState(() => checked = value ?? false),
+                    ),
+                    TRadio<String>(
+                      value: 'one',
+                      groupValue: checked ? 'one' : null,
+                      title: '单选框',
+                      onChanged: (_) => setState(() => checked = true),
+                    ),
+                    TSwitch(
+                      value: switched,
+                      openText: '开',
+                      closeText: '关',
+                      onChanged: (value) => setState(() => switched = value),
+                    ),
+                  ],
+                ),
+                _Section(
+                  title: '展示与反馈',
+                  children: [
+                    Row(
+                      children: [
+                        const TAvatar(child: Icon(TIcons.user)),
+                        const SizedBox(width: 12),
+                        TBadge(
+                          label: '3',
+                          child: const Icon(TIcons.mail, size: 30),
+                        ),
+                        const SizedBox(width: 12),
+                        TTag('标签', colorScheme: TTagColorScheme.primary),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const TNoticeBar(
+                      content: '这是一条 TD 公告提示',
+                      prefixIcon: TIcons.info_circle,
+                      suffixIcon: TIcons.chevron_right,
+                    ),
+                    const SizedBox(height: 16),
+                    const TLoading(size: TLoadingSize.medium, text: '加载中'),
+                    const SizedBox(height: 16),
+                    TEmpty(
+                      variant: TEmptyVariant.operation,
+                      emptyText: '暂无内容',
+                      operationText: '重新加载',
+                      onPressed: () {},
+                    ),
+                    const SizedBox(height: 16),
+                    const TResult(
+                      variant: TResultVariant.success,
+                      title: '操作成功',
+                      subtitle: '这是结果反馈组件',
+                    ),
+                  ],
+                ),
+                _Section(
+                  title: '进度与交互',
+                  children: [
+                    TProgress(variant: TProgressVariant.linear, value: .65),
+                    const SizedBox(height: 16),
+                    TProgress(variant: TProgressVariant.circular, value: .65),
+                    const SizedBox(height: 16),
+                    TSlider(
+                      value: slider,
+                      onChanged: (value) => setState(() => slider = value),
+                      showThumbValue: true,
+                    ),
+                    const SizedBox(height: 12),
+                    TRate(
+                      value: rate,
+                      allowHalf: true,
+                      onChanged: (value) => setState(() => rate = value),
+                    ),
+                    const SizedBox(height: 12),
+                    TStepper(
+                      value: stepper,
+                      min: 0,
+                      max: 10,
+                      onChanged: (value) => setState(() => stepper = value),
+                    ),
+                  ],
+                ),
+                _Section(
+                  title: '导航与其他',
+                  children: [
+                    TTabsBar(
+                      tabs: const [
+                        TTab(text: '选项一'),
+                        TTab(text: '选项二'),
+                        TTab(text: '选项三'),
+                      ],
+                      onTap: (value) => setState(() => tab = value),
+                      variant: TTabsBarVariant.filled,
+                    ),
+                    const SizedBox(height: 12),
+                    Text('当前选项：${tab + 1}'),
+                    const SizedBox(height: 12),
+                    TLink(child: const Text('这是一个 TD 链接'), onPressed: () {}),
+                    const SizedBox(height: 12),
+                    const TDivider(child: Text('分割线')),
+                    const SizedBox(height: 12),
+                    TCell(
+                      title: const Text('单元格'),
+                      subtitle: const Text('标题、副标题、箭头和操作'),
+                      arrow: true,
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

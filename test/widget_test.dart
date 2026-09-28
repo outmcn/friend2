@@ -10,7 +10,7 @@ void main() {
     expect(find.text('按钮变体'), findsOneWidget);
     expect(find.text('主要按钮'), findsOneWidget);
     await tester.tap(find.text('图标查看'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('TD 图标'), findsOneWidget);
     expect(find.text('搜索图标名称'), findsOneWidget);
   });
