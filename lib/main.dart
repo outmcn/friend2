@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import 'flutter_icon_catalog.dart';
 import 'td_icon_catalog.dart';
+import 'figma_image_catalog.dart';
 
 void main() => runApp(const Friend2IconApp());
 
@@ -37,7 +38,11 @@ class _IconReferenceHomeState extends State<_IconReferenceHome> {
     return Scaffold(
       body: IndexedStack(
         index: tab,
-        children: const [_FlutterIconsPage(), _TdIconsPage()],
+        children: const [
+          _FlutterIconsPage(),
+          _TdIconsPage(),
+          _FigmaImagesPage(),
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: tab,
@@ -49,11 +54,132 @@ class _IconReferenceHomeState extends State<_IconReferenceHome> {
             label: 'Flutter 官方',
           ),
           NavigationDestination(
-            icon: const Icon(TIcons.application),
-            selectedIcon: const Icon(TIcons.application_filled),
+            icon: Icon(TIcons.application),
+            selectedIcon: Icon(TIcons.application_filled),
             label: 'TD 图标',
           ),
+          NavigationDestination(
+            icon: Icon(Icons.image_outlined),
+            selectedIcon: Icon(Icons.image),
+            label: 'Figma 图片',
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _FigmaImagesPage extends StatefulWidget {
+  const _FigmaImagesPage();
+  @override
+  State<_FigmaImagesPage> createState() => _FigmaImagesPageState();
+}
+
+class _FigmaImagesPageState extends State<_FigmaImagesPage> {
+  final search = TextEditingController();
+  String query = '';
+  @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = figmaImageCatalog
+        .where((path) => path.toLowerCase().contains(query))
+        .toList(growable: false);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Figma 图片参考'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text('${entries.length}/${figmaImageCatalog.length}'),
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: TextField(
+              controller: search,
+              decoration: InputDecoration(
+                hintText: '搜索图片文件名',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: query.isEmpty
+                    ? null
+                    : IconButton(
+                        onPressed: () {
+                          search.clear();
+                          setState(() => query = '');
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (value) =>
+                  setState(() => query = value.trim().toLowerCase()),
+            ),
+          ),
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.fromLTRB(10, 4, 10, 24),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: .82,
+              ),
+              itemCount: entries.length,
+              itemBuilder: (_, index) => _FigmaImageCard(path: entries[index]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FigmaImageCard extends StatelessWidget {
+  const _FigmaImageCard({required this.path});
+  final String path;
+  @override
+  Widget build(BuildContext context) {
+    final name = path.split('/').last;
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => showDialog<void>(
+          context: context,
+          builder: (_) =>
+              Dialog(child: InteractiveViewer(child: Image.asset(path))),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Image.asset(
+                path,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) =>
+                    const Center(child: Icon(Icons.broken_image_outlined)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 9),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
